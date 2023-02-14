@@ -3,8 +3,8 @@ package ssm.blog.service;
 import ssm.blog.entity.Blogger;
 
 /**
- * @Description 博主Service接口
- * @author Ni Shengwu
+ * @Description 鍗氫富Service鎺ュ彛
+ * @author daxue
  *
  */
 public interface BloggerService {
@@ -13,6 +13,6 @@ public interface BloggerService {
 
 	public Blogger getBloggerData();
 
-	// 更新博主个人信息
+	// 鏇存柊鍗氫富涓汉淇℃伅
 	public Integer updateBlogger(Blogger blogger);
 }

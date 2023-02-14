@@ -21,9 +21,8 @@ import ssm.blog.util.DateUtil;
 import ssm.blog.util.ResponseUtil;
 
 /**
- * @Description ¹ÜÀíÔ±²©Ö÷Controller²ã£¬ĞèÒªÉí·İÈÏÖ¤
- * @author Ni Shengwu
- *
+ * @Description ç®¡ç†å‘˜åšä¸»Controllerå±‚ï¼Œéœ€è¦èº«ä»½è®¤è¯
+ * @author daxue
  */
 @Controller
 @RequestMapping("/admin/blogger")
@@ -31,27 +30,27 @@ public class BloggerAdminController {
 
 	@Resource
 	private BloggerService bloggerService;
-	
-	// ²éÑ¯²©Ö÷ĞÅÏ¢
+
+	// æŸ¥è¯¢åšä¸»ä¿¡æ¯
 	@RequestMapping("/findBlogger")
 	public String findBlogger(HttpServletResponse response) throws Exception {
-		
+
 		Blogger blogger = bloggerService.getBloggerData();
 		JSONObject jsonObject = JSONObject.fromObject(blogger);
 		ResponseUtil.write(response, jsonObject);
 		return null;
 	}
-	
-	//ĞŞ¸Ä²©Ö÷ĞÅÏ¢
+
+	//ä¿®æ”¹åšä¸»ä¿¡æ¯
 	@RequestMapping("/save")
 	public String save(
 			@RequestParam("imageFile") MultipartFile imageFile,
 			Blogger blogger,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		
-		if(!imageFile.isEmpty()) { //Èç¹ûÓÃ»§ÓĞ´«¹ıÕÕÆ¬£¬¾Í¸üĞÂ
-			String filePath = request.getServletContext().getRealPath("/"); //»ñÈ¡·şÎñÆ÷¸ùÂ·¾¶
+
+		if(!imageFile.isEmpty()) {
+			String filePath = request.getServletContext().getRealPath("/");
 			String imageName = DateUtil.getCurrentDateStr() + "." + imageFile.getOriginalFilename().split("\\.")[1];
 			imageFile.transferTo(new File(filePath + "static/userImages/" + imageName));
 			blogger.setImagename(imageName);
@@ -66,13 +65,13 @@ public class BloggerAdminController {
 		ResponseUtil.write(response, result);
 		return null;
 	}
-	
-	//ĞŞ¸Ä²©Ö÷ÃÜÂë
+
+	//ä¿®æ”¹åšä¸»å¯†ç 
 	@RequestMapping("/modifyPassword")
 	public String modifyPassword(
 			@RequestParam("password") String password,
 			HttpServletResponse response) throws Exception {
-		
+
 		Blogger blogger = new Blogger();
 		blogger.setPassword(CryptographyUtil.md5(password, "javacoder"));
 		int resultTotal = bloggerService.updateBlogger(blogger);
@@ -85,11 +84,11 @@ public class BloggerAdminController {
 		ResponseUtil.write(response, result);
 		return null;
 	}
-	
-	// ÍË³ö
+
+	// é€€å‡º
 	@RequestMapping("/logout")
 	public String logout() throws Exception {
-		
+
 		SecurityUtils.getSubject().logout();
 		return "redirect:/login.jsp";
 	}

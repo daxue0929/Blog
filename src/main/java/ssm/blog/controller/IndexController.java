@@ -23,7 +23,7 @@ import ssm.blog.util.PageUtil;
 import ssm.blog.util.StringUtil;
 
 /**
- * @Description Ö÷Ò³Controller
+ * @Description ï¿½ï¿½Ò³Controller
  * @author Ni Shengwu
  *
  */
@@ -35,7 +35,6 @@ public class IndexController {
 	private BlogService blogService;
 
 	/**
-	 * @Description ÇëÇóÖ÷Ò³
 	 * @return
 	 */
 	@RequestMapping("/index")
@@ -50,50 +49,52 @@ public class IndexController {
 		if (StringUtil.isEmpty(page)) {
 			page = "1";
 		}
-		// »ñÈ¡·ÖÒ³µÄbean
-		PageBean pageBean = new PageBean(Integer.parseInt(page), 10); //Ã¿Ò³ÏÔÊ¾10ÌõÊı¾İ
 
-		// mapÖĞ·â×°ÆğÊ¼Ò³ºÍÃ¿Ò³µÄ¼ÇÂ¼
+		// è·å–åˆ†é¡µçš„bean
+		PageBean pageBean = new PageBean(Integer.parseInt(page), 10); //æ¯é¡µæ˜¾ç¤º10æ¡æ•°æ®
+
+
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("start", pageBean.getStart());
 		map.put("pageSize", pageBean.getPageSize());
 		map.put("typeId", typeId);
 		map.put("releaseDateStr", releaseDateStr);
 
-		// »ñÈ¡²©¿ÍĞÅÏ¢
-		List<Blog> blogList = blogService.listBlog(map);		
+
+		// è·å–åšå®¢ä¿¡æ¯
+		List<Blog> blogList = blogService.listBlog(map);
 
 		for(Blog blog : blogList) {
 			List<String> imageList = blog.getImageList();
-			String blogInfo = blog.getContent(); //»ñÈ¡²©¿ÍÄÚÈİ
-			Document doc = Jsoup.parse(blogInfo); //½«²©¿ÍÄÚÈİ(ÍøÒ³ÖĞÒ²¾ÍÊÇÒ»Ğ©html)×ªÎªjsoupµÄDocument
-			Elements jpgs = doc.select("img[src$=.jpg]");//»ñÈ¡<img>±êÇ©ÖĞËùÓĞºó×ºÊÇ.jpgµÄÔªËØ
+			String blogInfo = blog.getContent(); //è·å–åšå®¢å†…å®¹
+			Document doc = Jsoup.parse(blogInfo); //å°†åšå®¢å†…å®¹(ç½‘é¡µä¸­ä¹Ÿå°±æ˜¯ä¸€äº›html)è½¬ä¸ºjsoupçš„Document
+			Elements jpgs = doc.select("img[src$=.jpg]"); //è·å–<img>æ ‡ç­¾ä¸­æ‰€æœ‰åç¼€æ˜¯.jpgçš„å…ƒç´ 
 			for(int i = 0; i < jpgs.size(); i++) {
-				Element jpg = jpgs.get(i); //»ñÈ¡µ½µ¥¸öÔªËØ
-				imageList.add(jpg.toString()); //°ÑÍ¼Æ¬ĞÅÏ¢´æµ½imageListÖĞ
+				Element jpg = jpgs.get(i);
+				imageList.add(jpg.toString()); // æŠŠå›¾ç‰‡ä¿¡æ¯å­˜åˆ°imageListä¸­
 				if(i == 2)
-					break; //Ö»´æÈıÕÅÍ¼Æ¬ĞÅÏ¢
+					break; // åªå­˜ä¸‰å¼ å›¾ç‰‡
 			}
 		}
-		
-		// ·ÖÒ³
+
+		// åˆ†é¡µ
 		StringBuffer param = new StringBuffer();
-		//Æ´½Ó²ÎÊı£¬Ö÷Òª¶ÔÓÚµã»÷ÎÄÕÂ·ÖÀà»òÕßÈÕÆÚ·ÖÀàºó£¬²é³öÀ´µÄ·ÖÒ³£¬ÒªÆ´½Ó¾ßÌåµÄ²ÎÊı
+		// æ‹¼æ¥å‚æ•°ï¼Œä¸»è¦å¯¹äºç‚¹å‡»æ–‡ç« åˆ†ç±»æˆ–è€…æ—¥æœŸåˆ†ç±»å¤Ÿï¼ŒæŸ¥å‡ºæ¥çš„åˆ†é¡µï¼Œè¦æ‹¼æ¥å…·ä½“çš„å‚æ•°
 		if(StringUtil.isNotEmpty(typeId)) {
 			param.append("typeId=" + typeId + "&");
 		}
 		if(StringUtil.isNotEmpty(releaseDateStr)) {
 			param.append("releaseDateStr=" + releaseDateStr + "&");
 		}
-		modelAndView.addObject("pageCode", PageUtil.genPagination( //µ÷ÓÃ´úÂëÉú³ÉµÄ¹¤¾ßÀàÉú³ÉÇ°Ì¨ÏÔÊ¾
-				request.getContextPath() + "/index.html", //»¹ÊÇÇëÇó¸ÃcontrollerµÄindex·½·¨
-				blogService.getTotal(map), 
+		modelAndView.addObject("pageCode", PageUtil.genPagination( // è°ƒç”¨ä»£ç ç”Ÿæˆçš„å·¥å…·ç±»ç”Ÿæˆå‰å°æ˜¾ç¤º
+				request.getContextPath() + "/index.html", // è¿˜æ˜¯è¯·æ±‚è¯¥controllerçš„indexæ–¹æ³•
+				blogService.getTotal(map),
 				Integer.parseInt(page), 10,
 				param.toString()));
-		
+
 		modelAndView.addObject("blogList", blogList);
 		modelAndView.addObject("commonPage", "foreground/blog/blogList.jsp");
-		modelAndView.addObject("title", "²©¿ÍÖ÷Ò³ - ÄßÉıÎäµÄ²©¿Í");
+		modelAndView.addObject("title", "åšå®¢ä¸»é¡µ - ç‹é›ªè¿ªçš„åšå®¢");
 		modelAndView.setViewName("mainTemp");
 
 		return modelAndView;

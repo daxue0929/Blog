@@ -9,22 +9,22 @@ import ssm.blog.entity.Blogger;
 import ssm.blog.service.BloggerService;
 
 /**
- * @Description 博主Service实现类
+ * @Description 锟斤拷锟斤拷Service实锟斤拷锟斤拷
  * @author Ni Shengwu
  *
  */
 @Service("bloggerService")
 public class BloggerServiceImpl implements BloggerService {
-	
+
 	@Resource
 	private BloggerDao bloggerDao;
-	
-	//根据用户名查询博主信息，用于登陆
+
+
 	public Blogger getByUsername(String username) {
 		return bloggerDao.getByUsername(username);
 	}
 
-	//获取博主信息
+
 	public Blogger getBloggerData() {
 		return bloggerDao.getBloggerData();
 	}

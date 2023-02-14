@@ -11,14 +11,10 @@ import ssm.blog.dao.CommentDao;
 import ssm.blog.entity.Comment;
 import ssm.blog.service.CommentService;
 
-/**
- * @Description 用户评论service实现类
- * @author Ni Shengwu
- *
- */
+
 @Service("commentService")
 public class CommentServiceImpl implements CommentService {
-	
+
 	@Resource
 	private CommentDao commentDao;
 

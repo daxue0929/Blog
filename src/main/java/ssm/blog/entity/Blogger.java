@@ -2,21 +2,21 @@ package ssm.blog.entity;
 
 
 /**
- * @Description 博主实体
- * @author Ni Shengwu
+ * @Description 鍗氫富瀹炰綋
+ * @author daxue
  *
  */
 public class Blogger {
-	
+
 	private Integer id;
-	private String username; //姓名
-	private String password; //密码
-	private String profile; //博主信息
-	private String nickname; //博主昵称
-	private String sign; //博主签名
-	private String imagename; //头像路径
-	
-	
+	private String username; //濮撳悕
+	private String password; //瀵嗙爜
+	private String profile; //鍗氫富淇℃伅
+	private String nickname; //鍗氫富鏄电О
+	private String sign; //鍗氫富绛惧悕
+	private String imagename; //澶村儚璺緞
+
+
 	public Integer getId() {
 		return id;
 	}
