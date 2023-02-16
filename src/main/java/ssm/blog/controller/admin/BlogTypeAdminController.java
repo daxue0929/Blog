@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
@@ -39,6 +41,7 @@ public class BlogTypeAdminController {
 	public String listBlogType(
 			@RequestParam(value = "page", required = false) String page,
 			@RequestParam(value = "rows", required = false) String rows,
+			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		PageBean pageBean = new PageBean(Integer.parseInt(page),
@@ -50,26 +53,33 @@ public class BlogTypeAdminController {
 		List<BlogType> blogTypeList = blogTypeService.listBlogType(map);
 		Long total = blogTypeService.getTotal(map);
 
+		// 设置ServletContext级别缓存 todo...暂时的做法，要优化。
+		ServletContext servletContext = request.getServletContext();
+		servletContext.setAttribute("blogTypeList", blogTypeList);
+
 		JSONObject result = new JSONObject();
 		JSONArray jsonArray = JSONArray.fromObject(blogTypeList);
 		result.put("rows", jsonArray);
 		result.put("total", total);
-		result.put("blogTypeList", blogTypeList);
 		ResponseUtil.write(response, result);
 		return null;
 	}
 
 	// 添加和更新博客类别
 	@RequestMapping("/save")
-	public String save(BlogType blogType, HttpServletResponse response)
+	public String save(BlogType blogType, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 		int resultTotal = 0; // 接收返回结果记录数
+
 		if (blogType.getId() == null) { // 说明是第一次插入
 			resultTotal = blogTypeService.addBlogType(blogType);
 		} else { // 有id表示修改
 			resultTotal = blogTypeService.updateBlogType(blogType);
 		}
+		List<BlogType> blogTypeData = blogTypeService.getBlogTypeData();
+		request.getServletContext().setAttribute("blogTypeList", blogTypeData);
+
 
 		JSONObject result = new JSONObject();
 		if (resultTotal > 0) {
@@ -85,6 +95,7 @@ public class BlogTypeAdminController {
 	@RequestMapping("/delete")
 	public String deleteBlog(
 			@RequestParam(value = "ids", required = false) String ids,
+			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		String[] idsStr = ids.split(",");
@@ -97,6 +108,10 @@ public class BlogTypeAdminController {
 				blogTypeService.deleteBlogType(id);
 			}
 		}
+
+		List<BlogType> blogTypeData = blogTypeService.getBlogTypeData();
+		request.getServletContext().setAttribute("blogTypeList", blogTypeData);
+
 		result.put("success", true);
 		ResponseUtil.write(response, result);
 		return null;

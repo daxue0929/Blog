@@ -33,4 +33,5 @@ public interface BlogTypeDao {
 	// 删除博客类别
 	public Integer deleteBlogType(Integer id);
 
+    BlogType getBlogTypeById(Integer id);
 }

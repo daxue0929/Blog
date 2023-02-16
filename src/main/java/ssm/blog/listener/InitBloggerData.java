@@ -28,7 +28,7 @@ public class InitBloggerData implements ServletContextListener, ApplicationConte
 	public void contextInitialized(ServletContextEvent sce) {
 		System.out.println(applicationContext);
 
-		ServletContext application = sce.getServletContext();
+		ServletContext servletContext = sce.getServletContext();
 
 
 		BloggerService bloggerService = (BloggerService) applicationContext.getBean("bloggerService");
@@ -36,22 +36,22 @@ public class InitBloggerData implements ServletContextListener, ApplicationConte
 
 		blogger.setPassword(null);
 
-		application.setAttribute("blogger", blogger);
+		servletContext.setAttribute("blogger", blogger);
 
 
 		LinkService linkService = (LinkService) applicationContext.getBean("linkService");
 		List<Link> linkList = linkService.getLinkData();
-		application.setAttribute("linkList", linkList);
+		servletContext.setAttribute("linkList", linkList);
 
 
 		BlogTypeService blogTypeService = (BlogTypeService) applicationContext.getBean("blogTypeService");
 		List<BlogType> blogTypeList = blogTypeService.getBlogTypeData();
-		application.setAttribute("blogTypeList", blogTypeList);
+		servletContext.setAttribute("blogTypeList", blogTypeList);
 
 
 		BlogService blogService = (BlogService) applicationContext.getBean("blogService");
 		List<Blog> blogTimeList = blogService.getBlogData();
-		application.setAttribute("blogTimeList", blogTimeList);
+		servletContext.setAttribute("blogTimeList", blogTimeList);
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {

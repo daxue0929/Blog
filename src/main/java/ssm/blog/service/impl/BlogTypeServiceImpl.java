@@ -48,4 +48,7 @@ public class BlogTypeServiceImpl implements BlogTypeService {
 		return blogTypeDao.deleteBlogType(id);
 	}
 
+	public BlogType getBlogTypeById(Integer id) {
+		return blogTypeDao.getBlogTypeById(id);
+	}
 }

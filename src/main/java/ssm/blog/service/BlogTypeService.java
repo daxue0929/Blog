@@ -28,4 +28,6 @@ public interface BlogTypeService {
 
 	// 删除博客类别
 	public Integer deleteBlogType(Integer id);
+
+	public BlogType getBlogTypeById(Integer id);
 }
